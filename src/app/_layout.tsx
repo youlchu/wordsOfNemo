@@ -1,13 +1,12 @@
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { Stack, useRouter, useSegments } from "expo-router";
-import { StyleSheet } from 'react-native';
-import { useEffect, useState } from 'react';
-import { initLocalization } from '../localization/Localization';
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { Stack, useRouter } from "expo-router";
+import { StyleSheet } from "react-native";
+import { useEffect, useState } from "react";
+import { initLocalization } from "../localization/Localization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function RootLayout() {
   const router = useRouter();
-  const segments = useSegments();
   const [isLoading, setIsLoading] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
 
@@ -25,7 +24,7 @@ export default function RootLayout() {
     if (isLoading) return;
 
     if (!isLoggedIn) {
-      router.replace("/login");
+      router.replace("/(auth)/login");
     } else {
       router.replace("/(tabs)");
     }
@@ -35,9 +34,9 @@ export default function RootLayout() {
 
   return (
     <GestureHandlerRootView style={styles.container}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="login" options={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="(auth)" />
       </Stack>
     </GestureHandlerRootView>
   );

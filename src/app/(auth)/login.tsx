@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context'; 
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useLocalization } from "@/src/localization";
 
-import { HeaderLine } from "../components/auth";
 import {
   KeyboardView,
   PrimaryButton,
   Separator,
   TextInput,
   Text,
-} from "../components";
-import { Theme } from "../theme";
-import { useLocalization } from "../localization/Localization";
+  HeaderLine,
+} from "@/src/components";
+import { Theme } from "@/src/theme";
 
 const LoginScreen = () => {
   const router = useRouter();
@@ -27,15 +27,14 @@ const LoginScreen = () => {
       await AsyncStorage.setItem("isLoggedIn", "true");
       router.replace("/(tabs)");
     } else {
-      Alert.alert(
-        getString("Error"),
-        getString("Invalid Credentials"),
-        [{ text: getString("OK") }]
-      );
+      Alert.alert(getString("Error"), getString("Invalid Credentials"), [
+        { text: getString("OK") },
+      ]);
     }
   };
-  const onClickRegister = () => {};
-
+  const onClickRegister = () => {
+    router.push("/(auth)/register");
+  };
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardView style={styles.content}>

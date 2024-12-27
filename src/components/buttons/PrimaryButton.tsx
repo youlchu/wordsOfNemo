@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity } from "react-native";
 
 import { Theme } from "../../theme";
 import { Text } from "../text";
@@ -7,12 +7,25 @@ import { Text } from "../text";
 type TProps = {
   title: string;
   onPress?: () => void;
+  loading?: boolean;
 };
 
-export const PrimaryButton: React.FC<TProps> = ({ title, onPress }) => {
+export const PrimaryButton: React.FC<TProps> = ({
+  title,
+  onPress,
+  loading = false,
+}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Text style={styles.text}>{title}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={styles.container}
+      disabled={loading}
+    >
+      {loading ? (
+        <ActivityIndicator color="white" />
+      ) : (
+        <Text style={styles.text}>{title}</Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -34,5 +47,9 @@ const styles = StyleSheet.create({
       height: 4,
     },
   },
-  text: { color: "white", fontSize: 16, fontFamily: "default-medium" },
+  text: {
+    color: "white",
+    fontSize: 16,
+    fontFamily: "default-medium",
+  },
 });
