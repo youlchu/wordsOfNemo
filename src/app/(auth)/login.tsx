@@ -3,8 +3,8 @@ import { Alert, ScrollView, StyleSheet, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useLocalization } from "@/src/localization";
 
+import { useLocalization } from "../../localization";
 import {
   KeyboardView,
   PrimaryButton,
@@ -12,15 +12,15 @@ import {
   TextInput,
   Text,
   HeaderLine,
-} from "@/src/components";
-import { Theme } from "@/src/theme";
+} from "../../components";
+import { Theme } from "../../theme";
 
 const LoginScreen = () => {
   const router = useRouter();
   const { getString } = useLocalization();
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [username, setUsername] = useState("user");
+  const [password, setPassword] = useState("pass");
 
   const onClickLogin = async () => {
     if (username === "user" && password === "pass") {
@@ -47,6 +47,7 @@ const LoginScreen = () => {
               onChangeText: setUsername,
             }}
           />
+
           <Separator height={16} />
           <TextInput
             inputProps={{
@@ -68,7 +69,7 @@ const LoginScreen = () => {
             onPress={onClickRegister}
           >
             <Text style={styles.registerButtonTitle}>
-              {getString("REGISTER_UPPER")}
+              {getString("REGISTER_UPPER")}asdfsdfasd
             </Text>
           </TouchableOpacity>
         </ScrollView>
