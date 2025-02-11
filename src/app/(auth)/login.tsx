@@ -69,7 +69,7 @@ const LoginScreen = () => {
             onPress={onClickRegister}
           >
             <Text style={styles.registerButtonTitle}>
-              {getString("REGISTER_UPPER")}asdfsdfasd
+              {getString("REGISTER_UPPER")}
             </Text>
           </TouchableOpacity>
         </ScrollView>

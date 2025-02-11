@@ -1,224 +1,144 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
-  Image,
+  Text,
   StyleSheet,
-  Animated,
   TouchableOpacity,
+  SafeAreaView,
+  Animated,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import PagerView from "react-native-pager-view";
+import Icon from "react-native-vector-icons/Feather";
+import { useLocalization } from "../../localization/Localization";
 
-import { getImageUrl } from "../../helpers";
-import { useLocalization } from "../../localization";
-import { Theme } from "../../theme";
-import { Text } from "../text";
-
-const Pagination = ({
-  activeDotIndex,
-  dotsLength,
-  dotColor,
-  inactiveDotColor,
-  inactiveDotScale = 0.8,
-  inactiveDotOpacity = 0.8,
-  containerStyle,
-  dotStyle,
-}: {
-  activeDotIndex: number;
-  dotsLength: number;
-  dotColor: string;
-  inactiveDotColor: string;
-  inactiveDotScale?: number;
-  inactiveDotOpacity?: number;
-  containerStyle?: any;
-  dotStyle?: any;
-}) => {
-  return (
-    <View
-      style={[
-        { flexDirection: "row", justifyContent: "center" },
-        containerStyle,
-      ]}
-    >
-      {Array.from({ length: dotsLength }).map((_, index) => (
-        <View
-          key={index}
-          style={[
-            {
-              width: 8,
-              height: 8,
-              borderRadius: 4,
-              backgroundColor:
-                index === activeDotIndex ? dotColor : inactiveDotColor,
-              marginHorizontal: 4,
-              opacity: index === activeDotIndex ? 1 : inactiveDotOpacity,
-              transform: [
-                { scale: index === activeDotIndex ? 1 : inactiveDotScale },
-              ],
-            },
-            dotStyle,
-          ]}
-        />
-      ))}
-    </View>
-  );
-};
-
-type TProps = {
-  height: number;
-  animValue: Animated.Value;
-  headerImages: string[];
-  onPressSearchInput: () => void;
-};
-
-export const HomeHeaderView: React.FC<TProps> = ({
-  height,
-  animValue,
-  headerImages = [],
-  onPressSearchInput,
-}) => {
+const HomeHeaderView = ({ height = 280, animValue }) => {
   const { getString } = useLocalization();
-  const safeArea = useSafeAreaInsets();
-  const [indicatorIndex, setIndicatorIndex] = useState(0);
 
   const headerHeight = animValue.interpolate({
-    inputRange: [0, height + safeArea.top],
-    outputRange: [height + safeArea.top, safeArea.top + 60],
-    extrapolate: "clamp",
-  });
-
-  const sliderHeight = animValue.interpolate({
-    inputRange: [0, height + safeArea.top],
-    outputRange: [height + safeArea.top - 26, 1],
-    extrapolate: "clamp",
-  });
-
-  const opacityForSlider = animValue.interpolate({
-    inputRange: [height, height + safeArea.top],
-    outputRange: [1, 0],
+    inputRange: [0, height],
+    outputRange: [height, 80],
     extrapolate: "clamp",
   });
 
   return (
-    <Animated.View style={[styles.headerContainer, { height: headerHeight }]}>
-      <Animated.View
-        style={[
-          StyleSheet.absoluteFill,
-          {
-            opacity: opacityForSlider,
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-            height: sliderHeight,
-          },
-        ]}
-      >
-        <PagerView
-          style={StyleSheet.absoluteFill}
-          initialPage={0}
-          onPageSelected={(e) => setIndicatorIndex(e.nativeEvent.position)}
-        >
-          {headerImages.map((item, index) => (
-            <Image
-              key={`sliderKey${index}`}
-              resizeMode="cover"
-              style={{ flex: 1 }}
-              source={{
-                uri: getImageUrl(item),
-              }}
-            />
-          ))}
-        </PagerView>
+    <Animated.View style={[styles.container, { height: headerHeight }]}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.statsContainer}>
+          <View style={styles.statItem}>
+            <Icon name="book" size={20} color="#fff" />
+            <Text style={styles.statText}>243</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Icon name="star" size={20} color="#FFD700" />
+            <Text style={styles.statText}>45</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Icon name="alert-circle" size={20} color="#FFB6C1" />
+            <Text style={styles.statText}>12</Text>
+          </View>
+        </View>
 
-        <View style={styles.paginationView}>
-          <Pagination
-            activeDotIndex={indicatorIndex}
-            dotsLength={headerImages.length}
-            dotColor={Theme.colors.primaryColor}
-            inactiveDotColor={Theme.colors.lightgray}
-            inactiveDotScale={0.8}
-            inactiveDotOpacity={0.8}
-            containerStyle={styles.paginationContainerStyle}
-            dotStyle={styles.paginationDotStyle}
+        <View style={styles.titleContainer}>
+          <Text style={styles.title}>WordMaster</Text>
+          <View style={styles.streakContainer}>
+            <Text style={styles.streakText}>Streak: 7</Text>
+          </View>
+        </View>
+
+        <TouchableOpacity style={styles.searchInput} activeOpacity={0.7}>
+          <Icon
+            name="search"
+            size={20}
+            color="#666"
+            style={styles.searchIcon}
           />
-        </View>
-
-        <View
-          pointerEvents="none"
-          style={{
-            position: "absolute",
-          }}
-        >
-          <Image
-            source={require("../../../assets/nemo-fish.png")}
-            resizeMode="contain"
-            style={{
-              width: 110,
-            }}
-          />
-        </View>
-      </Animated.View>
-
-      <TouchableOpacity
-        style={styles.searchContainer}
-        activeOpacity={0.95}
-        onPress={onPressSearchInput}
-      >
-        <View style={styles.searchInput}>
-          <Text style={{ color: Theme.colors.lightgray, fontSize: 14 }}>
-            {getString("Search Property")}
-          </Text>
-        </View>
-      </TouchableOpacity>
+          <Text style={styles.searchText}>{getString("Search Property")}</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  flex1: {
-    flex: 1,
-  },
-  headerContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    zIndex: 10,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paginationView: {
-    position: "absolute",
-    bottom: 34,
-    alignSelf: "center",
-  },
-  paginationContainerStyle: {
-    paddingVertical: 0,
-  },
-  paginationDotStyle: {
-    marginHorizontal: -20,
-  },
-  searchContainer: {
-    position: "absolute",
-    left: 16,
-    right: 16,
-    bottom: 0,
-  },
-  searchInput: {
-    backgroundColor: "white",
-    paddingVertical: 16,
-    paddingHorizontal: 16,
-    fontSize: 15,
-    borderRadius: 12,
-    borderColor: "lightgray",
-    borderWidth: StyleSheet.hairlineWidth,
-    shadowColor: "#00000015",
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 4,
+  container: {
+    backgroundColor: "#4F46E5",
+    width: "100%",
+    shadowColor: "#000",
     shadowOffset: {
       width: 0,
-      height: 4,
+      height: 2,
     },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  safeArea: {
+    flex: 1,
+  },
+  statsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
+  },
+  statItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  statText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  titleContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+  streakContainer: {
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  streakText: {
+    color: "#fff",
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  searchInput: {
+    backgroundColor: "#fff",
+    marginHorizontal: 16,
+    marginTop: 8,
+    marginBottom: 16,
+    padding: 12,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  searchIcon: {
+    marginRight: 8,
+  },
+  searchText: {
+    color: "#666",
+    fontSize: 15,
   },
 });
+
+export default HomeHeaderView;
