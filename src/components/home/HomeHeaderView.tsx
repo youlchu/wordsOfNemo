@@ -36,14 +36,12 @@ const HomeHeaderView = ({ height = 280, animValue }) => {
             <Text style={styles.statText}>12</Text>
           </View>
         </View>
-
         <View style={styles.titleContainer}>
           <Text style={styles.title}>WordMaster</Text>
           <View style={styles.streakContainer}>
             <Text style={styles.streakText}>Streak: 7</Text>
           </View>
         </View>
-
         <TouchableOpacity style={styles.searchInput} activeOpacity={0.7}>
           <Icon
             name="search"
@@ -138,6 +136,12 @@ const styles = StyleSheet.create({
   searchText: {
     color: "#666",
     fontSize: 15,
+  },
+  addButton: {
+    position: "absolute",
+    right: 16,
+    bottom: 16,
+    padding: 8,
   },
 });
 
