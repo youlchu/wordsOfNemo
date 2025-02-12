@@ -8,6 +8,7 @@ import (
     "github.com/joho/godotenv"
     swaggerFiles "github.com/swaggo/files"
     ginSwagger "github.com/swaggo/gin-swagger"
+    _ "wordsofnemo/docs" 
 )
 
 // @title WordsOfNemo API
