@@ -5,8 +5,8 @@ import (
     "log"
     "os"
     "gorm.io/driver/postgres"
+    "wordsofnemo/server/internal/models"
     "gorm.io/gorm"
-    "wordsofnemo/internal/auth"
 )
 
 func InitDB() *gorm.DB {
@@ -23,7 +23,11 @@ func InitDB() *gorm.DB {
         log.Fatal("Failed to connect to database:", err)
     }
 
-    db.AutoMigrate(&auth.User{})
+    err = db.AutoMigrate(&models.User{})
+    if err != nil {
+        log.Fatal("Failed to migrate database:", err)
+    }
 
+    log.Println("Successfully connected to database")
     return db
 }

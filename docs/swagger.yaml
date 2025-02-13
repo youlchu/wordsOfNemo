@@ -1,9 +1,91 @@
 basePath: /api
+definitions:
+  models.RegisterRequest:
+    properties:
+      email:
+        example: john@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      last_name:
+        example: Doe
+        type: string
+      password:
+        example: "123456"
+        minLength: 6
+        type: string
+      phone:
+        example: "5551234567"
+        maxLength: 15
+        minLength: 10
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - phone
+    type: object
+  models.RegisterResponse:
+    properties:
+      created_at:
+        type: string
+      email:
+        example: john@example.com
+        type: string
+      first_name:
+        example: John
+        type: string
+      id:
+        example: 1
+        type: integer
+      last_name:
+        example: Doe
+        type: string
+      phone:
+        example: "5551234567"
+        type: string
+    type: object
 host: localhost:3000
 info:
   contact: {}
   description: WordsOfNemo API documentation
   title: WordsOfNemo API
   version: "1.0"
-paths: {}
+paths:
+  /users/register:
+    post:
+      consumes:
+      - application/json
+      description: Create a new user account
+      parameters:
+      - description: User registration details
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.RegisterResponse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Register a new user
+      tags:
+      - users
 swagger: "2.0"
